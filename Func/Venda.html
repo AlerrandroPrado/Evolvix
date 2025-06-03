@@ -22,12 +22,7 @@
             </div>
 
             <ul class="sidebar-links">
-                <li>
-                    <a href="home.html">
-                        <i class="fas fa-chart-pie"></i>
-                        <span class="link-text">Dashboard</span>
-                    </a>
-                </li>
+            
                 <li>
                     <a href="Clientes.html">
                         <i class="fas fa-users"></i>
@@ -109,7 +104,7 @@
                     </div>
 
                     <div class="campo">
-                        <input type="number" id="desconto" min="0" max="100" placeholder="" required>
+                        <input type="number" id="desconto" min="0" max="100" placeholder="" required oninput="if(this.value > 100) this.value = 100;">
                         <label for="desconto">Desconto (%)</label>
                     </div>
                 </div>

@@ -1,39 +1,55 @@
-/* Reset de estilos básicos */
+/* Resetando margens e paddings */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Variáveis de cores para facilitar a manutenção */
+:root {
+    --primary: #004f8b;
+    --primary-light: #0071c5;
+    --primary-dark: #003b6a;
+    --secondary: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --gray: #6c757d;
+    --gray-light: #e9ecef;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+/* Estilos gerais do body */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     min-height: 100vh;
-    background-color: #f8f8f8;
+    background-color: #f4f7fc;
     margin: 0;
     position: relative;
+    color: var(--dark);
 }
 
-/* Removemos o botão hambúrguer */
-.hamburger {
-    display: none;
-}
-
-/* Sidebar inicial com largura mínima */
+/* Sidebar com design melhorado */
 .sidebar {
-    width: 60px; /* largura da sidebar quando fechada */
+    width: 60px;
     height: 100vh;
-    background-color: #004f8b;
+    background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
     position: fixed;
     left: 0;
     top: 0;
     overflow-x: hidden;
-    transition: width 0.3s ease; /* animação suave na mudança de largura */
+    transition: width 0.3s ease;
     z-index: 999;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar.open {
-    width: 250px; /* largura da sidebar quando aberta */
+    width: 250px;
 }
 
 /* Container da sidebar */
@@ -55,33 +71,32 @@ body {
     margin: 20px 0;
     cursor: pointer;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 15px;
     height: 60px;
-    white-space: nowrap; /* Impede quebra de linha */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Quando sidebar está aberta, alinha logo e texto à esquerda */
 .sidebar.open .sidebar-brand {
     justify-content: flex-start;
 }
 
-/* Logo em tamanho fixo e centralizado */
 .sidebar-brand .logo-img {
     width: 40px;
     height: 40px;
     object-fit: contain;
     flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-/* Texto da marca oculto quando fechado */
 .sidebar .brand-text {
     display: none;
-    margin-left: 10px;
+    margin-left: 15px;
     white-space: nowrap;
     font-weight: bold;
     font-size: 18px;
+    letter-spacing: 0.5px;
 }
 
 .sidebar.open .brand-text {
@@ -93,7 +108,7 @@ body {
     list-style: none;
     width: 100%;
     padding-left: 0;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .sidebar-links a {
@@ -102,27 +117,27 @@ body {
     text-overflow: ellipsis;
     display: flex;
     align-items: center;
-    color: white;
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 16px;
-    padding: 12px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    transition: background-color 0.3s ease;
+    padding: 14px 16px;
+    margin: 5px 0;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
     justify-content: center;
 }
 
-/* Ícones sempre alinhados à esquerda, mesmo quando a barra estiver aberta */
 .sidebar.open .sidebar-links a {
     justify-content: flex-start;
 }
 
 .sidebar-links i {
-    margin-right: 10px;
+    margin-right: 15px;
     min-width: 20px;
     text-align: center;
+    font-size: 18px;
 }
 
-/* Texto dos links só aparece quando sidebar está aberta */
 .sidebar .link-text {
     display: none;
     transition: opacity 0.3s ease;
@@ -131,34 +146,46 @@ body {
 
 .sidebar.open .link-text {
     display: inline;
-    opacity: 1; /* Aparece com transição de opacidade */
+    opacity: 1;
 }
 
-/* Hover nos links */
 .sidebar-links a:hover {
-    background-color: #005fa3;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left: 3px solid var(--warning);
 }
 
-/* Conteúdo principal da página */
+.sidebar-links a.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-left: 3px solid var(--warning);
+}
+
+/* Estilo do conteúdo principal */
 .content {
     margin-left: 60px;
-    margin-right: 60px;
-    padding: 20px;
+    padding: 30px;
     flex: 1;
     transition: margin-left 0.3s ease;
+    max-width: 100%;
 }
 
 .sidebar.open + .content {
     margin-left: 250px;
 }
 
-/* Foto de perfil no topo direito */
+/* Imagem do usuário no canto superior direito */
 .user-profile {
     position: fixed;
     top: 20px;
     right: 20px;
     z-index: 1001;
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.user-profile:hover {
+    transform: scale(1.05);
 }
 
 .user-photo {
@@ -167,234 +194,250 @@ body {
     border-radius: 50%;
     border: 3px solid white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
 }
 
-/* Menu suspenso do perfil */
+/* Menu de opções do usuário */
 .profile-options {
     display: none;
-    background-color: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    width: 150px;
+    background-color: var(--white);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    border-radius: var(--border-radius);
+    width: 180px;
     text-align: left;
     position: absolute;
-    top: 50px;
+    top: 60px;
     right: 0;
+    padding: 10px 0;
+    font-weight: 500;
+    color: var(--dark);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .profile-options ul {
     list-style-type: none;
     padding: 0;
+    margin-top: 8px;
 }
 
 .profile-options ul li {
-    padding: 10px;
+    padding: 0;
 }
 
 .profile-options ul li a {
-    color: #333;
+    color: var(--dark);
     text-decoration: none;
-    font-size: 16px;
+    font-size: 15px;
+    display: block;
+    padding: 10px 15px;
+    transition: background-color 0.2s ease;
 }
 
-.profile-options ul li:hover {
-    background-color: #f0f0f0;
+.profile-options ul li a:hover {
+    background-color: var(--gray-light);
+    color: var(--primary);
 }
 
 .profile-options.show {
     display: block;
 }
 
-/* Títulos e parágrafos */
-h1, h2 {
-    color: #333;
+/* Estilo dos títulos e textos */
+h1 {
+    color: var(--primary);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: var(--primary);
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
 }
 
 p {
-    font-size: 18px;
-    color: #555;
+    font-size: 16px;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 25px;
 }
 
-/* Formulário */
+/* Formulário de cadastro */
 .form-cadastro {
-    width: 100%;
-    max-width: none;
-    margin: 40px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
     margin-bottom: 30px;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="date"],
-select {
-    width: 48%;
-    padding: 12px 12px 12px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    font-size: 16px;
-    background: transparent;
-}
-
-label {
-    position: absolute;
-    top: 12px;
-    left: 10px;
-    color: #999;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s ease all;
-    background-color: white;
-    padding: 0 4px;
-}
-
-input:focus + label,
-input:not(:placeholder-shown) + label {
-    top: -10px;
-    left: 8px;
-    font-size: 12px;
-    color: #0078d4;
-}
-
-select + label,
-input[type="date"] + label {
-    top: -10px;
-    left: 8px;
-    font-size: 12px;
-    color: #0078d4;
-}
-
-/* Botões de navegação */
-.botoes-navegacao {
+/* Seleção de tipo de pessoa */
+.selecao-tipo-pessoa {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 15px;
-    margin-right: 50px;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 25px;
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
 }
 
-.btn-avancar,
-.btn-voltar {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
+.selecao-tipo-pessoa input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    color: white;
 }
 
-.btn-avancar {
-    background-color: #0078d4;
+.selecao-tipo-pessoa label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark);
+    cursor: pointer;
+    position: static;
+    padding: 0 5px;
 }
 
-.btn-avancar:hover {
-    background-color: #005fa3;
-}
-
-.btn-voltar {
-    background-color: #999;
-}
-
-.btn-voltar:hover {
-    background-color: #777;
+/* Grupos de campos */
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 25px;
 }
 
 /* Campos com label flutuante */
 .campo {
     position: relative;
-    width: 48%;
+    width: calc(33.33% - 14px);
+    margin-bottom: 5px;
 }
 
 .campo input,
 .campo select {
     width: 100%;
-    padding: 14px 10px 10px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 15px 15px 10px;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--border-radius);
     outline: none;
     font-size: 16px;
     background-color: transparent;
+    transition: var(--transition);
 }
 
 .campo label {
     position: absolute;
-    left: 10px;
-    top: 14px;
+    left: 15px;
+    top: 15px;
     background: white;
-    padding: 0 4px;
-    color: #999;
-    font-size: 16px;
+    padding: 0 5px;
+    color: var(--gray);
+    font-size: 15px;
     pointer-events: none;
-    transition: 0.2s ease all;
+    transition: var(--transition);
+}
+
+.campo input:focus,
+.campo input:not(:placeholder-shown),
+.campo select:focus,
+.campo select:not([value=""]):not([value="null"]) {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 79, 139, 0.1);
 }
 
 .campo input:focus + label,
 .campo input:not(:placeholder-shown) + label,
-.campo input.filled + label,
 .campo select:focus + label,
-.campo select.filled + label {
-    top: -8px;
-    left: 8px;
+.campo select:not([value=""]):not([value="null"]) + label {
+    top: -10px;
+    left: 10px;
     font-size: 12px;
-    color: #0078d4;
+    color: var(--primary);
+    font-weight: 500;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
-    .campo {
-        width: 100%;
-    }
-}
-
-/* Estilo de erro nos campos */
+/* Estilo para campos de erro */
 .campo input.error {
-    border-color: red;
-    background-color: #ffe6e6;
+    border-color: var(--danger);
+    background-color: rgba(220, 53, 69, 0.05);
 }
 
 .error-message {
-    color: red;
+    color: var(--danger);
     font-size: 12px;
     margin-top: 5px;
-    display: block;
+    font-weight: 500;
 }
 
-/* Estilo padrão dos radio buttons com labels visíveis */
-.selecao-tipo-pessoa {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: 30px;
-    padding: 10px 0;
-    
-}
-
-.selecao-tipo-pessoa input[type="radio"] {
-    width: 20px;                 /* Aumenta largura */
-    height: 20px;                /* Aumenta altura */
-    accent-color: #0078d4;       /* Cor do botão */
-    margin: 0;                   /* Remove margens extras */
-}
-
-.selecao-tipo-pessoa label {
-    position: static;
-     font-size: 20px !important;
-    color: #2e2e2e !important;  /* Altere para qualquer cor que desejar */
+/* Botão de enviar */
+.btn-avancar {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
-    padding-right: 10px;
-    
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
 }
 
+.btn-avancar:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
+/* Responsividade */
+@media (max-width: 992px) {
+    .campo {
+        width: calc(50% - 10px);
+    }
+}
 
+@media (max-width: 768px) {
+    .content {
+        padding: 20px 15px;
+        margin-left: 60px;
+    }
+    
+    .sidebar.open + .content {
+        margin-left: 0;
+    }
+    
+    .sidebar.open {
+        width: 100%;
+    }
+    
+    .form-cadastro {
+        padding: 20px;
+    }
+    
+    .form-group {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .campo {
+        width: 100%;
+    }
+    
+    .selecao-tipo-pessoa {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}

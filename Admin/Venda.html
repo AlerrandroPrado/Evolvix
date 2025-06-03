@@ -109,7 +109,7 @@
                     </div>
 
                     <div class="campo">
-                        <input type="number" id="desconto" min="0" max="100" placeholder="" required>
+                        <input type="number" id="desconto" min="0" max="100" placeholder="" required oninput="if(this.value > 100) this.value = 100;">
                         <label for="desconto">Desconto (%)</label>
                     </div>
                 </div>
