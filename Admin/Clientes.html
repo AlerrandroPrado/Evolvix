@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <!-- Link para o Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="Clientes.css">
+    <link rel="icon" href="Evolvix icon.png" type="image/x-icon">
+</head>
+
+<body>
+
+    <!-- Sidebar (Navbar Lateral) -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-container">
+            <!-- Logo ou título do sistema -->
+            <div class="sidebar-brand" onclick="toggleSidebar()">
+                <img src="Evolvix sidebar.png" alt="Logo Evolvix" class="logo-img">
+                <span class="brand-text">Evolvix</span>
+            </div>
+
+            <!-- Links de navegação com ícones -->
+            <ul class="sidebar-links">
+                <li>
+                    <a href="home.html">
+                        <i class="fas fa-chart-pie"></i>
+                        <span class="link-text">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Clientes.html">
+                        <i class="fas fa-users"></i>
+                        <span class="link-text">Cadastro de Clientes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Venda.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="link-text">Vendas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Categoria.html">
+                        <i class="fas fa-layer-group"></i>
+                        <span class="link-text">Categoria</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Produtos.html">
+                        <i class="fas fa-box-open"></i>
+                        <span class="link-text">Produtos</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Imagem do usuário no canto superior direito -->
+    <div class="user-profile" onclick="toggleProfileOptions()">
+        <img src="Perfil.jpg" alt="" class="user-photo">
+        <div class="profile-options" id="profileOptions">
+            Login - Administrativo
+            <ul>
+                <li><a href="../index.html">Encerrar Sessão</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="content">
+        <h1>Clientes</h1>
+        <br>
+        <!-- Barra com botão, busca e filtro -->
+        <div class="toolbar">
+            <a href="#" id="btnNovoCliente" class="btn-add-cliente">
+                <i class="fas fa-user-plus"></i> Adicionar Cliente
+            </a>
+
+            <input type="text" id="busca" placeholder="Pesquisar por nome, CPF/CNPJ ou telefone">
+
+            <select id="filtroTipo">
+                <option value="">Todos</option>
+                <option value="fisica">Pessoa Física</option>
+                <option value="juridica">Pessoa Jurídica</option>
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+            </select>
+        </div>
+
+        <!-- Tabela de clientes -->
+        <table id="tabelaClientes" class="clientes-table">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Nome</th>
+                    <th>Documento</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaClientes">
+                <!-- As linhas de clientes serão inseridas aqui via JavaScript -->
+            </tbody>
+        </table>
+        
+
+        
+
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></script>
+    <script src="Clientes.js"></script>
+</body>
+
+</html>

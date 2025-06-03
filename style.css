@@ -1,0 +1,285 @@
+/* Corpo da Página */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    position: relative;  /* Necessário para o fundo animado */
+    overflow: hidden;    /* Impede que o fundo se estenda para fora da tela */
+    animation: fade-in-top 1s ease-out;  /* Animação para o corpo */
+    background: linear-gradient(#29e0e6, #09558f, #251133); /* Adicionando o fundo animado */
+    background-size: 100% 200%;
+    animation: bg-pan-top 15s ease-in-out infinite; /* Animação em loop suave */
+}
+
+/* Animação do corpo (entrada suave) */
+@keyframes fade-in-top {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animação do fundo */
+@-webkit-keyframes bg-pan-top {
+    0% {
+        background-position: 50% 100%; /* Começa na parte inferior */
+    }
+    50% {
+        background-position: 50% 0; /* Termina na parte superior */
+    }
+    100% {
+        background-position: 50% 100%; /* Volta para a parte inferior */
+    }
+}
+
+@keyframes bg-pan-top {
+    0% {
+        background-position: 50% 100%; /* Começa na parte inferior */
+    }
+    50% {
+        background-position: 50% 0; /* Termina na parte superior */
+    }
+    100% {
+        background-position: 50% 100%; /* Volta para a parte inferior */
+    }
+}
+
+/* Estilos do Container de Login */
+.login-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+/* Animação do título */
+.text-focus-in {
+    -webkit-animation: text-focus-in 1s cubic-bezier(.55, .085, .68, .53) both;
+    animation: text-focus-in 1s cubic-bezier(.55, .085, .68, .53) both;
+}
+
+/* Animação de foco do texto */
+@-webkit-keyframes text-focus-in {
+    0% {
+        -webkit-filter: blur(12px);
+        filter: blur(12px);
+        opacity: 0;
+    }
+    100% {
+        -webkit-filter: blur(0);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+@keyframes text-focus-in {
+    0% {
+        -webkit-filter: blur(12px);
+        filter: blur(12px);
+        opacity: 0;
+    }
+    100% {
+        -webkit-filter: blur(0);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+/* Animação da logo */
+.fade-in-top {
+    -webkit-animation: fade-in-top .6s cubic-bezier(.39, .575, .565, 1.000) both;
+    animation: fade-in-top .6s cubic-bezier(.39, .575, .565, 1.000) both;
+}
+
+@-webkit-keyframes fade-in-top {
+    0% {
+        -webkit-transform: translateY(-50px);
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in-top {
+    0% {
+        -webkit-transform: translateY(-50px);
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Estilos de entrada do formulário */
+h2 {
+    margin-bottom: 20px;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0078d4;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0d6cb6;
+}
+
+/* Rodapé do formulário */
+.footer {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* Estilo da logo */
+.logo {
+    width: 300px;
+    margin-bottom: 20px;
+    border-radius: 50%; /* Torna a imagem redonda, se for quadrada */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adiciona sombra à logo */
+}
+
+h1{
+    font-weight: bold;     /* Negrito */
+    color: #0078d4;        /* Cor do texto */
+    font-family: 'Segoe UI', sans-serif;  /* Fonte */
+    margin:auto;
+    margin-bottom: 8px;
+}
+
+.cad{
+    width: 300px;
+    margin-bottom: 20px;
+    border-radius: 50%; /* Torna a imagem redonda, se for quadrada */
+}
+
+/* Estilo do texto exibido */
+.display-3 {
+    color: rgb(0, 255, 85);
+}
+
+.bg-body-tertiary {
+    background: #293233c7;
+}
+
+.text-bg-primary {
+    background: linear-gradient(#1b2425, #00ff55c7);
+}
+
+label[for="nivel"] {
+    font-size: 15px;       /* Tamanho da fonte */
+    font-weight: bold;     /* Negrito */
+    color: #333333;        /* Cor do texto */
+    font-family: 'Segoe UI', sans-serif;  /* Fonte */
+    margin-bottom: 1px;
+    display: inline-block;
+}
+
+label[for="input"] {
+    font-size: 13px;       /* Tamanho da fonte */
+    font-weight: bold;     /* Negrito */
+    color: #757575;        /* Cor do texto */
+    font-family: 'Segoe UI', sans-serif;  /* Fonte */
+    margin-bottom: 2px;
+    display: block;        /* Faz o label ocupar toda a largura possível */
+    text-align: left;      /* Alinha o texto à esquerda */
+    margin-left: 0;        /* Garante que o label fique bem colado à esquerda */
+}
+
+label[for="rodape"]{
+    font-size: 13px;       /* Tamanho da fonte */
+    color: #757575;        /* Cor do texto */
+    font-family: 'Segoe UI', sans-serif;  /* Fonte */
+    margin-bottom: 15px;
+    display: block;        /* Faz o label ocupar toda a largura possível */
+    text-align: left;      /* Alinha o texto à esquerda */
+    margin-left: 0;        /* Garante que o label fique bem colado à esquerda */
+}
+
+label[for="acimaRodape"]{
+    font-size: 17px;       /* Tamanho da fonte */
+    color: #000000;        /* Cor do texto */
+    font-family: 'Segoe UI', sans-serif;  /* Fonte */
+    text-align: left;      /* Alinha o texto à esquerda */
+    margin-left: 0px;        /* Garante que o label fique bem colado à esquerda */
+}
+
+label {
+    font-size: 15px;       /* Tamanho da fonte */
+         /* Negrito */
+    color: #757575;        /* Cor do texto */
+    font-family: 'Segoe UI', sans-serif;  /* Fonte */
+    margin-bottom: 2px;
+    display: block;        /* Faz o label ocupar toda a largura possível */
+    text-align: left;      /* Alinha o texto à esquerda */
+    margin-left: 0px;        /* Garante que o label fique bem colado à esquerda */
+}
+
+hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ccc; /*linha divisoria*/
+}
+
+
+
+.radio-group {
+    display: flex;
+    justify-content: center; /* opcional: centraliza horizontalmente */
+    gap: 20px; /* espaço entre os botões */
+    margin: 10px 0;
+}
+
+.radio-group label {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+a {
+    color: #0078d4;       /* Cor inicial do link */
+    text-decoration: none; /* Remove o sublinhado padrão */
+    font-weight: bold;     /* Deixa o texto em negrito */
+}
+
+a:hover {
+    color: #0d6cb6;       /* Cor do link ao passar o mouse */
+    text-decoration: underline; /* Coloca sublinhado ao passar o mouse */
+}
+
+a:active {
+    color: #004085;       /* Cor do link quando clicado */
+}
+
+

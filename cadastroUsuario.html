@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastre-se</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="Evolvix icon.png" type="image/x-icon">
+</head>
+
+<body class="bg-body-tertiary2">
+    <div class="login-container">
+        <img src="Evolvix.png" alt="Logo" class="logo">
+
+        <form action="home.html" method="POST">
+            <label for="input">Nome:</label>
+            <input type="name" id="nome" name="nome" placeholder="Nome" required>
+            <label for="input">E-mail:</label>
+            <input type="email" id="email" name="email" placeholder="E-mail" required>
+            <label for="input">Senha:</label>
+            <input type="password" id="password" name="password" placeholder="Senha" required>
+            <label for="nivel">Selecione o Nível de Usuário:</label><br>
+            <div class="radio-group">
+                <label for="adm">
+                    <input type="radio" id="adm" name="nivel" value="Administrativo" required>
+                    Administrativo
+                </label>
+                <label for="func">
+                    <input type="radio" id="func" name="nivel" value="Funcionario"required>
+                    Funcionário
+                </label>
+            </div>
+            <button type="submit">Cadastre-se</button>
+        </form>
+        <div class="footer">
+            <p>Já tem uma conta? <a href="index.html">Clique aqui</a></p>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+        event.preventDefault(); // evita envio do formulário
+
+        const nome = document.getElementById("nome").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const nivel = document.querySelector('input[name="nivel"]:checked')?.value;
+
+        if (!nivel) {
+            alert("Por favor, selecione o nível de usuário.");
+            return;
+        }
+
+        const novoUsuario = {
+            nome,
+            email,
+            password,
+            nivel
+        };
+
+        const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+        const jaExiste = usuarios.some(u => u.email === email);
+
+        if (jaExiste) {
+            alert("E-mail já cadastrado!");
+            return;
+        }
+
+        usuarios.push(novoUsuario);
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+        // Redireciona com base no nível
+        window.location.href = "index.html";
+    });
+</script>
+
+
+
+
+</html>

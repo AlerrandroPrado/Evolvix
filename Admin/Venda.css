@@ -1,0 +1,463 @@
+/* Resetando margens e paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos gerais do body */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f8f8;
+    margin: 0;
+    position: relative;
+    /* Necessário para posicionar a imagem fora da sidebar */
+}
+
+/* Sidebar inicial com largura mínima */
+.sidebar {
+    width: 60px;
+    /* largura da sidebar quando fechada */
+    height: 100vh;
+    background-color: #004f8b;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-x: hidden;
+    transition: width 0.3s ease;
+    /* animação suave na mudança de largura */
+    z-index: 999;
+}
+
+.sidebar.open {
+    width: 250px;
+    /* largura da sidebar quando aberta */
+}
+
+/* Container da sidebar */
+.sidebar-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+    margin: 20px 0;
+    cursor: pointer;
+    width: 100%;
+    padding: 0 10px;
+    height: 60px;
+    white-space: nowrap;
+    /* Impede quebra de linha */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Quando sidebar está aberta, alinha logo e texto à esquerda */
+.sidebar.open .sidebar-brand {
+    justify-content: flex-start;
+}
+
+/* Logo em tamanho fixo e centralizado */
+.sidebar-brand .logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Texto da marca oculto quando fechado */
+.sidebar .brand-text {
+    display: none;
+    margin-left: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.sidebar.open .brand-text {
+    display: inline-block;
+}
+
+/* Lista de links */
+.sidebar-links {
+    list-style: none;
+    width: 100%;
+    padding-left: 0;
+    margin-top: 20px;
+}
+
+.sidebar-links a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s ease;
+    justify-content: center;
+}
+
+/* Ícones sempre alinhados à esquerda, mesmo quando a barra estiver aberta */
+.sidebar.open .sidebar-links a {
+    justify-content: flex-start;
+}
+
+.sidebar-links i {
+    margin-right: 10px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Texto dos links só aparece quando sidebar está aberta */
+.sidebar .link-text {
+    display: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.sidebar.open .link-text {
+    display: inline;
+    opacity: 1;
+    /* Aparece com transição de opacidade */
+}
+
+/* Hover nos links */
+.sidebar-links a:hover {
+    background-color: #005fa3;
+}
+
+
+/* Estilo do conteúdo principal */
+.content {
+    margin-left: 60px;
+    /* Distância inicial do conteúdo quando a sidebar estiver fechada */
+    padding: 20px;
+    flex: 1;
+    transition: margin-left 0.3s ease;
+    /* Transição suave para a margem */
+}
+
+/* Quando a sidebar estiver aberta, a margem é ajustada para 250px */
+.sidebar.open+.content {
+    margin-left: 250px;
+}
+
+/* Imagem do usuário no canto superior direito da tela */
+.user-profile {
+    position: fixed;
+    /* Posiciona a imagem no topo da tela */
+    top: 20px;
+    right: 20px;
+    /* Alinha à direita */
+    z-index: 1001;
+    /* Fixa a imagem acima de outros elementos */
+    cursor: pointer;
+}
+
+.user-photo {
+    width: 50px;
+    /* Tamanho da imagem do usuário */
+    height: 50px;
+    border-radius: 50%;
+    /* Faz a foto ser circular */
+    border: 3px solid white;
+    /* Borda branca ao redor da imagem */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Adiciona sombra à imagem */
+}
+
+/* Menu de opções do usuário */
+.profile-options {
+    display: none;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 150px;
+    text-align: left;
+    position: absolute;
+    top: 50px;
+    /* Espaçamento entre a imagem e as opções */
+    right: 0;
+}
+
+.profile-options ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-options ul li {
+    padding: 10px;
+}
+
+.profile-options ul li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.profile-options ul li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Exibe o menu de opções quando a imagem é clicada */
+.profile-options.show {
+    display: block;
+}
+
+/* Estilo do conteúdo */
+h1 {
+    color: #333;
+}
+
+p {
+    font-size: 18px;
+    color: #555;
+}
+
+.venda-page {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.venda-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.venda-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.venda-header h2 {
+    color: #004f8b;
+    font-size: 26px;
+}
+
+.venda-form {
+    margin-bottom: 30px;
+}
+
+.cliente-group {
+    margin-bottom: 20px;
+}
+
+.cliente-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.produto-form {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.produto-form .form-group {
+    flex: 1;
+    min-width: 200px;
+        font-size: 16px;
+}
+
+.produto-form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+        font-size: 16px;
+}
+
+.produto-form button {
+    margin-top: 24px;
+    width: 100%;
+    background-color: #004f8b;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.produto-form button:hover {
+    background-color: #0071c5;
+}
+
+.produto-table-container {
+    height: 400px;
+    /* Altura fixa */
+    overflow-y: auto;
+    /* Rolagem só aparece se o conteúdo passar da altura */
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fefefe;
+}
+
+
+.produto-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 16px;
+    table-layout: fixed;
+}
+
+.produto-table thead {
+    background-color: #004f8b;
+    color: white;
+}
+
+.produto-table th,
+.produto-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.pagamento-section {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.resumo-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.resumo-item label {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.resumo-item input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 20px;
+}
+
+.resumo-item span {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+.btn-excluir {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-excluir:hover {
+    background-color: #c0392b;
+}
+
+.botoes {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn {
+    flex: 1;
+    /* Cada botão ocupa a mesma largura */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo para cada botão */
+.adicionar {
+    background-color: #004f8b;
+    /* Verde */
+}
+
+.excluir {
+    background-color: #dc3545;
+    /* Vermelho */
+}
+
+.finalizar {
+    background-color: #28a745;
+    /* Azul */
+}
+
+/* Efeito hover para todos */
+.btn:hover {
+    opacity: 0.8;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  width: 80%;
+  max-height: 90%;
+  overflow-y: auto;
+  border-radius: 8px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  cursor: pointer;
+}
