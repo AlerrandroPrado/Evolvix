@@ -1,28 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esqueceu senha</title>
+    <title>Evolvix - Esqueceu a Senha</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="Evolvix icon.png" type="image/x-icon">
+    <link rel="icon" href="Evolvix icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="auth-container">
+        <div class="auth-card" id="forgotPasswordCard">
+            <div class="auth-header">
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shield-icon">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                    </svg>
+                </div>
+                <h1>Esqueceu a senha?</h1>
+                <p class="subtitle">Informe seu e-mail cadastrado para enviarmos as instruções de redefinição de senha.</p>
+            </div>
 
-<body class="bg-body-tertiary2">
-    <div class="login-container">
-        <img src="bloqueado.png" alt="Logo" class="cad">
-        <h1>Esqueceu a senha?</h1>
-        <form action="Enviado.html" method="POST">
-            <label>Informe seu e-mail cadastrado para enviarmos as instruções de redefinição de senha.</label>
-            
-            <input type="email" id="email" name="email" placeholder="E-mail" required>
-            <button type="submit">Enviar</button>
-        </form>
-        <div class="footer">
-            <p>Já tem uma conta? <a href="index.html">Clique aqui</a></p>
+            <form id="forgotPasswordForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">E-mail cadastrado</label>
+                    <div class="input-container">
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                            </svg>
+                        </span>
+                        <input type="email" id="email" placeholder="seu@email.com" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="resetButton">
+                    <span class="btn-text">Enviar instruções</span>
+                    <span class="btn-loader hidden"></span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="index.html" class="link back-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m12 19-7-7 7-7"/>
+                        <path d="M19 12H5"/>
+                    </svg>
+                    Voltar ao login
+                </a>
+            </div>
+        </div>
+
+        <!-- Success card (hidden by default) -->
+        <div class="auth-card success-card hidden" id="successCard">
+            <div class="auth-header">
+                <div class="success-icon-container">
+                    <img src="check-icon.png" alt="Success" class="success-icon">
+                </div>
+                <h1>E-mail enviado!</h1>
+                <p class="subtitle">Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.</p>
+            </div>
+
+            <div class="auth-footer">
+                <a href="index.html" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m12 19-7-7 7-7"/>
+                        <path d="M19 12H5"/>
+                    </svg>
+                    Voltar ao login
+                </a>
+                <p class="resend-text">
+                    Não recebeu o e-mail? Verifique sua pasta de spam ou 
+                    <button type="button" class="link" id="tryAgainButton">tente novamente</button>
+                </p>
+            </div>
         </div>
     </div>
-</body>
 
+    <script src="script.js"></script>
+</body>
 </html>

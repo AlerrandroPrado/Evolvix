@@ -16,15 +16,18 @@
     <!-- Sidebar (Navbar Lateral) -->
     <nav id="sidebar" class="sidebar">
         <div class="sidebar-container">
-            <!-- Logo ou título do sistema -->
             <div class="sidebar-brand" onclick="toggleSidebar()">
                 <img src="Evolvix sidebar.png" alt="Logo Evolvix" class="logo-img">
                 <span class="brand-text">Evolvix</span>
             </div>
 
-            <!-- Links de navegação com ícones -->
             <ul class="sidebar-links">
-                
+                <li>
+                    <a href="home.html">
+                        <i class="fas fa-chart-pie"></i>
+                        <span class="link-text">Dashboard</span>
+                    </a>
+                </li>
                 <li>
                     <a href="Clientes.html">
                         <i class="fas fa-users"></i>
@@ -32,7 +35,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="Venda.html" class="active">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="link-text">Vendas</span>
                     </a>
@@ -66,95 +69,444 @@
 
     <!-- Conteúdo principal -->
     <div class="content">
-        <div class="content venda-page">
-            <div class="venda-container">
-                <div class="venda-header">
-                    <div>
-                        <h2>Vendas</h2>
-                        <br>
-                        <p><strong>Usuário:</strong> <span id="nomeUsuario">Carregando...</span></p>
-                    </div>
-                    <div>
-                        <p><strong>Data:</strong> <span id="dataVenda">--/--/----</span></p>
+        <h1>Sistema de Vendas</h1>
+        <p>Gerencie suas vendas e finalize transações de forma rápida e eficiente.</p>
+
+        <div class="venda-container">
+            <div class="venda-header">
+                <div class="header-info">
+                    <h2>Nova Venda</h2>
+                    <p><strong>Usuário:</strong> <span id="nomeUsuario">Carregando...</span></p>
+                </div>
+                <div class="header-date">
+                    <p><strong>Data:</strong> <span id="dataVenda">--/--/----</span></p>
+                </div>
+            </div>
+
+            <div class="venda-form">
+                <div class="cliente-section">
+                    <div class="campo cliente-autocomplete">
+                        <input type="text" id="cliente" placeholder="" autocomplete="off" required>
+                        <label for="cliente">Cliente</label>
+                        <div id="clienteList" class="cliente-autocomplete-items"></div>
                     </div>
                 </div>
 
-                <div class="venda-form">
-                    <div class="cliente-group">
-                        <label for="cliente">Cliente:</label>
-                        <input type="text" id="cliente" placeholder="Digite o nome do cliente">
+                <div class="produto-form">
+                    <div class="campo">
+                        <input type="text" id="codigoProduto" placeholder="" required>
+                        <label for="codigoProduto">Código do Produto</label>
                     </div>
 
-                    <div class="produto-form">
-                        <div class="form-group">
-                            <label for="codigoProduto">Código do Produto:</label>
-                            <input type="text" id="codigoProduto" placeholder="Ex: 1234">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="quantidade">Quantidade:</label>
-                            <input type="number" id="quantidade" min="1" placeholder="0">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="peso">Peso:</label>
-                            <input type="number" id="peso" placeholder="Peso (kg)" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="desconto">Desconto (%):</label>
-                            <input type="number" id="desconto" min="0" max="100" placeholder="0">
-                        </div>
+                    <div class="campo">
+                        <input type="number" id="quantidade" min="1" placeholder="" required>
+                        <label for="quantidade">Quantidade</label>
                     </div>
-                    <br>
-                    <div class="botoes">
-                        <button class="btn adicionar" onclick="adicionarProduto()">
-                            <i class="fas fa-plus"></i> Adicionar Produto
-                        </button>
-                        <button class="btn excluir" onclick="excluirTodosProdutos()">
-                            <i class="fas fa-trash-alt"></i> Excluir Todos
-                        </button>
-                        <button class="btn finalizar" onclick="finalizarCompra()">
-                            <i class="fas fa-shopping-cart"></i> Finalizar Compra
-                        </button>
+
+                    <div class="campo">
+                        <input type="number" id="peso" placeholder="" step="0.01">
+                        <label for="peso">Peso (kg)</label>
+                    </div>
+
+                    <div class="campo">
+                        <input type="number" id="desconto" min="0" max="100" placeholder="" required>
+                        <label for="desconto">Desconto (%)</label>
                     </div>
                 </div>
 
-                <div class="produto-table-container">
-                    <table class="produto-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Descrição</th>
-                                <th>Qtd / Peso</th>
-                                <th>Unitário</th>
-                                <th>Total</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaProdutos">
-                            <!-- Produtos aparecerão aqui -->
-                        </tbody>
-                    </table>
+                <div class="botoes">
+                    <button class="btn adicionar" onclick="adicionarProduto()">
+                        <i class="fas fa-plus"></i> Adicionar Produto
+                    </button>
+                    <button class="btn excluir" onclick="excluirTodosProdutos()">
+                        <i class="fas fa-trash-alt"></i> Excluir Todos
+                    </button>
+                    <button class="btn finalizar" onclick="finalizarCompra()">
+                        <i class="fas fa-shopping-cart"></i> Finalizar Compra
+                    </button>
                 </div>
+            </div>
 
-                <div class="pagamento-section">
-                    <div class="resumo-item">
-                        <label>Subtotal:</label>
-                        <span id="subtotal">R$ 0,00</span>
+            <div class="produto-table-container">
+                <table class="produto-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Descrição</th>
+                            <th>Qtd / Peso</th>
+                            <th>Unitário</th>
+                            <th>Total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaProdutos">
+                        <!-- Produtos aparecerão aqui -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagamento-section">
+                <div class="resumo-item">
+                    <label>Subtotal:</label>
+                    <span id="subtotal" class="valor-display">R$ 0,00</span>
+                </div>
+                <div class="resumo-item">
+                    <div class="campo">
+                        <input type="number" id="valorPago" oninput="calcularTroco()" placeholder="" step="0.01">
+                        <label for="valorPago">Valor Pago</label>
                     </div>
-                    <div class="resumo-item">
-                        <label for="valorPago">Valor Pago:</label>
-                        <input type="number" id="valorPago" oninput="calcularTroco()" placeholder="R$ 0,00">
-                    </div>
-                    <div class="resumo-item">
-                        <label>Troco:</label>
-                        <span id="troco">R$ 0,00</span>
-                    </div>
+                </div>
+                <div class="resumo-item">
+                    <label>Troco:</label>
+                    <span id="troco" class="valor-display">R$ 0,00</span>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <!-- Script para autocomplete de clientes -->
+    <script>
+        // Função para carregar clientes do localStorage
+        function carregarClientesParaAutocomplete() {
+            const clientesSalvos = localStorage.getItem("clientes");
+            if (clientesSalvos) {
+                return JSON.parse(clientesSalvos);
+            } else {
+                return [];
+            }
+        }
+
+        // Função para inicializar o autocomplete
+        function inicializarAutocomplete() {
+            const input = document.getElementById("cliente");
+            const clientesList = document.getElementById("clienteList");
+            const clientes = carregarClientesParaAutocomplete();
+            
+            // Função para mostrar as sugestões
+            input.addEventListener("input", function() {
+                const val = this.value.toLowerCase();
+                clientesList.innerHTML = "";
+                
+                if (!val) {
+                    clientesList.style.display = "none";
+                    return;
+                }
+                
+                clientesList.style.display = "block";
+                let encontrados = 0;
+                
+                clientes.forEach(cliente => {
+                    const nome = cliente.nome || cliente.razaoSocial || "";
+                    const documento = cliente.cpf || cliente.cnpj || "";
+                    
+                    if ((nome.toLowerCase().includes(val) || documento.toLowerCase().includes(val)) && encontrados < 5) {
+                        const item = document.createElement("div");
+                        const displayName = nome;
+                        const displayDoc = documento ? ` (${documento})` : "";
+                        
+                        item.innerHTML = `<strong>${displayName}</strong>${displayDoc}`;
+                        item.addEventListener("click", function() {
+                            input.value = displayName;
+                            clientesList.style.display = "none";
+                        });
+                        
+                        clientesList.appendChild(item);
+                        encontrados++;
+                    }
+                });
+                
+                if (encontrados === 0) {
+                    const item = document.createElement("div");
+                    item.textContent = "Nenhum cliente encontrado";
+                    item.style.color = "#999";
+                    item.style.fontStyle = "italic";
+                    clientesList.appendChild(item);
+                }
+            });
+            
+            // Fechar a lista quando clicar fora
+            document.addEventListener("click", function(e) {
+                if (e.target !== input) {
+                    clientesList.style.display = "none";
+                }
+            });
+            
+            // Navegação com teclado
+            input.addEventListener("keydown", function(e) {
+                const items = clientesList.getElementsByTagName("div");
+                if (items.length === 0) return;
+                
+                if (e.key === "ArrowDown") {
+                    currentFocus++;
+                    addActive(items);
+                } else if (e.key === "ArrowUp") {
+                    currentFocus--;
+                    addActive(items);
+                } else if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (items[currentFocus]) {
+                            items[currentFocus].click();
+                        }
+                    }
+                }
+            });
+            
+            let currentFocus = -1;
+            
+            function addActive(items) {
+                if (!items) return;
+                
+                removeActive(items);
+                
+                if (currentFocus >= items.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (items.length - 1);
+                
+                items[currentFocus].classList.add("cliente-autocomplete-active");
+            }
+            
+            function removeActive(items) {
+                for (let i = 0; i < items.length; i++) {
+                    items[i].classList.remove("cliente-autocomplete-active");
+                }
+            }
+        }
+        
+        // Inicializar o autocomplete quando o DOM estiver carregado
+        document.addEventListener("DOMContentLoaded", function() {
+            inicializarAutocomplete();
+        });
+    </script>
+
+    <!-- Script para melhorar o relatório de venda -->
+    <script>
+        // Sobrescrever a função finalizarCompra do Venda.js
+        const originalFinalizarCompra = window.finalizarCompra;
+        
+        window.finalizarCompra = function() {
+            if (listaProdutos.length === 0) {
+                alert("Nenhum produto adicionado à venda.");
+                return;
+            }
+
+            const valorPagoStr = document.getElementById("valorPago").value.trim();
+            if (!valorPagoStr) {
+                alert("Digite o valor pago pelo cliente.");
+                document.getElementById("valorPago").focus();
+                return;
+            }
+
+            const valorPago = parseFloat(valorPagoStr.replace(',', '.'));
+            if (isNaN(valorPago) || valorPago <= 0) {
+                alert("Valor pago inválido.");
+                document.getElementById("valorPago").focus();
+                return;
+            }
+
+            const nomeCliente = document.getElementById("cliente").value;
+            const nomeVendedor = document.getElementById("nomeUsuario").textContent;
+            const data = document.getElementById("dataVenda").textContent;
+            const subtotal = listaProdutos.reduce((acc, item) => acc + item.total, 0);
+            const troco = valorPago - subtotal;
+
+            if (troco < 0) {
+                alert(`Valor pago insuficiente. Faltam R$ ${(Math.abs(troco)).toFixed(2).replace('.', ',')}.`);
+                return;
+            }
+
+            // Relatório melhorado
+            let relatorio = `
+                <!DOCTYPE html>
+                <html lang="pt-br">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Comprovante de Venda - Evolvix</title>
+                    <style>
+                        body {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            line-height: 1.6;
+                            color: #333;
+                            max-width: 800px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }
+                        .relatorio-venda {
+                            background-color: #fff;
+                            padding: 30px;
+                            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                            border-radius: 8px;
+                        }
+                        .relatorio-header {
+                            text-align: center;
+                            margin-bottom: 30px;
+                            padding-bottom: 20px;
+                            border-bottom: 2px solid #eee;
+                        }
+                        .relatorio-header h2 {
+                            color: #004f8b;
+                            font-size: 24px;
+                            margin-bottom: 10px;
+                        }
+                        .relatorio-header img {
+                            max-width: 150px;
+                            margin-bottom: 15px;
+                        }
+                        .relatorio-info {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 25px;
+                        }
+                        .relatorio-info div {
+                            flex: 1;
+                        }
+                        .relatorio-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 20px 0;
+                        }
+                        .relatorio-table th {
+                            background-color: #004f8b;
+                            color: white;
+                            padding: 12px;
+                            text-align: left;
+                        }
+                        .relatorio-table td {
+                            padding: 12px;
+                            border-bottom: 1px solid #eee;
+                        }
+                        .relatorio-table tr:nth-child(even) {
+                            background-color: #f9f9f9;
+                        }
+                        .relatorio-footer {
+                            margin-top: 30px;
+                            padding-top: 20px;
+                            border-top: 2px solid #eee;
+                        }
+                        .relatorio-total {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: 16px;
+                            margin-bottom: 10px;
+                        }
+                        .relatorio-total.grand {
+                            font-size: 20px;
+                            font-weight: bold;
+                            color: #004f8b;
+                            margin-top: 15px;
+                            padding-top: 15px;
+                            border-top: 1px dashed #ccc;
+                        }
+                        .relatorio-agradecimento {
+                            text-align: center;
+                            margin-top: 30px;
+                            font-style: italic;
+                            color: #666;
+                        }
+                        @media print {
+                            body {
+                                padding: 0;
+                            }
+                            .relatorio-venda {
+                                box-shadow: none;
+                                padding: 0;
+                            }
+                            .no-print {
+                                display: none;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="relatorio-venda">
+                        <div class="relatorio-header">
+                            <h2>Comprovante de Venda</h2>
+                            <p>Evolvix Sistema de Gestão</p>
+                        </div>
+                        
+                        <div class="relatorio-info">
+                            <div>
+                                <p><strong>Cliente:</strong> ${nomeCliente || 'Cliente não identificado'}</p>
+                                <p><strong>Vendedor:</strong> ${nomeVendedor}</p>
+                            </div>
+                            <div>
+                                <p><strong>Data:</strong> ${data}</p>
+                                <p><strong>Hora:</strong> ${new Date().toLocaleTimeString('pt-BR')}</p>
+                            </div>
+                        </div>
+                        
+                        <table class="relatorio-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Produto</th>
+                                    <th>Qtd / Peso</th>
+                                    <th>Unitário</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+            listaProdutos.forEach((item, index) => {
+                relatorio += `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${item.descricao}</td>
+                                    <td>${item.quantidade} ${item.tipoVenda === "peso" ? "kg" : "un"}</td>
+                                    <td>R$ ${item.unitario.toFixed(2).replace('.', ',')}</td>
+                                    <td>R$ ${item.total.toFixed(2).replace('.', ',')}</td>
+                                </tr>
+                `;
+            });
+
+            relatorio += `
+                            </tbody>
+                        </table>
+                        
+                        <div class="relatorio-footer">
+                            <div class="relatorio-total">
+                                <span>Subtotal:</span>
+                                <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <div class="relatorio-total">
+                                <span>Valor Pago:</span>
+                                <span>R$ ${valorPago.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <div class="relatorio-total grand">
+                                <span>Troco:</span>
+                                <span>R$ ${troco.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="relatorio-agradecimento">
+                            <p>Agradecemos pela preferência!</p>
+                            <p>Volte sempre.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="no-print" style="text-align: center; margin-top: 20px;">
+                        <button onclick="window.print()" style="padding: 10px 20px; background: #004f8b; color: white; border: none; border-radius: 4px; cursor: pointer;">Imprimir Comprovante</button>
+                        <button onclick="window.close()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">Fechar</button>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            // Abre o relatório em nova janela
+            const win = window.open("", "_blank");
+            win.document.write(relatorio);
+            win.document.close();
+            
+            // Limpa a venda atual
+            listaProdutos = [];
+            atualizarTabela();
+            calcularSubtotal();
+            document.getElementById("valorPago").value = "";
+            document.getElementById("troco").textContent = "R$ 0,00";
+            document.getElementById("cliente").value = "";
+        };
+    </script>
 
     <script src="Venda.js"></script>
 </body>
