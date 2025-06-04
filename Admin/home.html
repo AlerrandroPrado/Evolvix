@@ -55,7 +55,6 @@
             color: #777;
         }
 
-        /* Grid para gráficos 3 colunas e 2 linhas */
         .charts-grid {
             margin-top: 40px;
             display: grid;
@@ -95,7 +94,6 @@
             height: 270px !important;
         }
 
-        /* Responsividade para tablets e celulares */
         @media (max-width: 900px) {
             .charts-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -108,6 +106,15 @@
                 grid-template-columns: 1fr;
                 grid-auto-rows: 350px;
             }
+        }
+
+        .no-data {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #666;
+            font-style: italic;
         }
     </style>
 </head>
@@ -122,7 +129,7 @@
 
             <ul class="sidebar-links">
                 <li>
-                    <a href="home.html"><i class="fas fa-chart-pie"></i><span class="link-text">Dashboard</span></a>
+                    <a href="home.html" class="active"><i class="fas fa-chart-pie"></i><span class="link-text">Dashboard</span></a>
                 </li>
                 <li>
                     <a href="Clientes.html"><i class="fas fa-users"></i><span class="link-text">Clientes</span></a>
@@ -131,8 +138,7 @@
                     <a href="Venda.html"><i class="fas fa-shopping-cart"></i><span class="link-text">Vendas</span></a>
                 </li>
                 <li>
-                    <a href="Categoria.html"><i class="fas fa-layer-group"></i><span
-                            class="link-text">Categoria</span></a>
+                    <a href="Categoria.html"><i class="fas fa-layer-group"></i><span class="link-text">Categoria</span></a>
                 </li>
                 <li>
                     <a href="Produtos.html"><i class="fas fa-box-open"></i><span class="link-text">Produtos</span></a>
@@ -159,241 +165,389 @@
             <div class="card">
                 <i class="fas fa-users"></i>
                 <h3>Total de Clientes</h3>
-                <p>1.245</p>
+                <p id="totalClientes">0</p>
             </div>
             <div class="card">
-                <i class="fas fa-shopping-cart"></i>
-                <h3>Vendas no Mês</h3>
-                <p>384</p>
+                <i class="fas fa-layer-group"></i>
+                <h3>Categorias Ativas</h3>
+                <p id="totalCategorias">0</p>
             </div>
             <div class="card">
                 <i class="fas fa-box"></i>
                 <h3>Produtos Ativos</h3>
-                <p>768</p>
+                <p id="totalProdutos">0</p>
             </div>
             <div class="card">
                 <i class="fas fa-dollar-sign"></i>
-                <h3>Faturamento</h3>
-                <p>R$ 47.580</p>
+                <h3>Valor Total em Estoque</h3>
+                <p id="valorEstoque">R$ 0,00</p>
             </div>
         </div>
 
         <div class="charts-grid">
             <div class="chart-container">
-                <h2>Vendas Mensais (Unidades)</h2>
-                <canvas id="salesChart"></canvas>
+                <h2>Produtos por Categoria</h2>
+                <canvas id="produtosCategoriaChart"></canvas>
             </div>
 
             <div class="chart-container">
-                <h2>Receita Mensal (R$)</h2>
-                <canvas id="revenueChart"></canvas>
+                <h2>Estoque por Categoria</h2>
+                <canvas id="estoqueChart"></canvas>
             </div>
 
             <div class="chart-container round-chart">
-                <h2>Distribuição por Categoria (%)</h2>
-                <canvas id="categoryChart"></canvas>
+                <h2>Distribuição de Clientes</h2>
+                <canvas id="clientesChart"></canvas>
             </div>
 
             <div class="chart-container">
-                <h2>Produtos mais Vendidos</h2>
-                <canvas id="topProductsChart"></canvas>
+                <h2>Top 5 Produtos (Quantidade)</h2>
+                <canvas id="topProdutosChart"></canvas>
             </div>
 
             <div class="chart-container round-chart">
-                <h2>Clientes Ativos por Região</h2>
-                <canvas id="clientsRegionChart"></canvas>
+                <h2>Status dos Clientes</h2>
+                <canvas id="statusClientesChart"></canvas>
             </div>
 
             <div class="chart-container">
-                <h2>Ticket Médio Mensal (R$)</h2>
-                <canvas id="avgTicketChart"></canvas>
+                <h2>Valor por Categoria (R$)</h2>
+                <canvas id="valorCategoriaChart"></canvas>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
     <script>
-        // Vendas Mensais (Barra)
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        const salesChart = new Chart(salesCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [{
-                    label: 'Unidades Vendidas',
-                    data: [420, 500, 610, 580, 540, 620],
-                    backgroundColor: '#004f8b',
-                    borderRadius: 10,
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
+        // Função para alternar sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
 
-        // Receita Mensal (Linha)
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(revenueCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [{
-                    label: 'Receita',
-                    data: [22000, 25000, 28000, 27000, 26000, 30000],
-                    fill: false,
-                    borderColor: '#004f8b',
-                    backgroundColor: '#004f8b',
-                    tension: 0.3,
-                    pointRadius: 5,
-                    pointHoverRadius: 7
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false }
+        // Função para alternar menu do perfil
+        function toggleProfileOptions() {
+            const profileOptions = document.getElementById('profileOptions');
+            profileOptions.classList.toggle('show');
+        }
+
+        // Função para carregar dados do localStorage
+        function carregarDados() {
+            const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+            const categorias = JSON.parse(localStorage.getItem("categoriasCadastradas")) || [];
+            const produtos = JSON.parse(localStorage.getItem("produtosCadastrados")) || [];
+
+            return { clientes, categorias, produtos };
+        }
+
+        // Função para atualizar cards do dashboard
+        function atualizarCards() {
+            const { clientes, categorias, produtos } = carregarDados();
+
+            // Total de clientes
+            document.getElementById('totalClientes').textContent = clientes.length;
+
+            // Total de categorias
+            document.getElementById('totalCategorias').textContent = categorias.length;
+
+            // Total de produtos
+            document.getElementById('totalProdutos').textContent = produtos.length;
+
+            // Valor total em estoque
+            const valorTotal = produtos.reduce((total, produto) => {
+                return total + (produto.preco * produto.quantidade);
+            }, 0);
+            document.getElementById('valorEstoque').textContent = 
+                valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Função para criar gráfico de produtos por categoria
+        function criarGraficoProdutosPorCategoria() {
+            const { produtos } = carregarDados();
+            const ctx = document.getElementById('produtosCategoriaChart').getContext('2d');
+
+            // Contar produtos por categoria
+            const categoriaCount = {};
+            produtos.forEach(produto => {
+                categoriaCount[produto.categoria] = (categoriaCount[produto.categoria] || 0) + 1;
+            });
+
+            const labels = Object.keys(categoriaCount);
+            const data = Object.values(categoriaCount);
+
+            if (labels.length === 0) {
+                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto cadastrado</div>';
+                return;
+            }
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Quantidade de Produtos',
+                        data: data,
+                        backgroundColor: '#004f8b',
+                        borderRadius: 10,
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function (value) {
-                                return 'R$ ' + value.toLocaleString();
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Função para criar gráfico de estoque por categoria
+        function criarGraficoEstoque() {
+            const { produtos } = carregarDados();
+            const ctx = document.getElementById('estoqueChart').getContext('2d');
+
+            // Somar estoque por categoria
+            const estoqueCategoria = {};
+            produtos.forEach(produto => {
+                estoqueCategoria[produto.categoria] = (estoqueCategoria[produto.categoria] || 0) + produto.quantidade;
+            });
+
+            const labels = Object.keys(estoqueCategoria);
+            const data = Object.values(estoqueCategoria);
+
+            if (labels.length === 0) {
+                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto em estoque</div>';
+                return;
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Quantidade em Estoque',
+                        data: data,
+                        fill: false,
+                        borderColor: '#007acc',
+                        backgroundColor: '#007acc',
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Função para criar gráfico de distribuição de clientes
+        function criarGraficoClientes() {
+            const { clientes } = carregarDados();
+            const ctx = document.getElementById('clientesChart').getContext('2d');
+
+            // Contar clientes por tipo
+            const tipoCount = { 'Pessoa Física': 0, 'Pessoa Jurídica': 0 };
+            clientes.forEach(cliente => {
+                if (cliente.tipoPessoa === 'fisica') {
+                    tipoCount['Pessoa Física']++;
+                } else if (cliente.tipoPessoa === 'juridica') {
+                    tipoCount['Pessoa Jurídica']++;
+                }
+            });
+
+            const labels = Object.keys(tipoCount);
+            const data = Object.values(tipoCount);
+
+            if (data.every(val => val === 0)) {
+                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum cliente cadastrado</div>';
+                return;
+            }
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Clientes',
+                        data: data,
+                        backgroundColor: ['#004f8b', '#007acc'],
+                        hoverOffset: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#333',
+                                font: { size: 14 }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
-        // Distribuição por Categoria (Pizza)
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        const categoryChart = new Chart(categoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Alimentos', 'Hortifrut', 'Bebidas', 'Laticínios', 'Padaria', 'Limpeza', 'Higiene', 'Mercearia', 'Pet Shop'],
-                datasets: [{
-                    label: 'Categorias',
-                    data: [20, 12, 18, 10, 8, 7, 6, 12, 7],
-                    backgroundColor: [
-                        '#004f8b',
-                        '#007acc',
-                        '#00aaff',
-                        '#66cfff',
-                        '#a0c4ff',
-                        '#ff9f1c',
-                        '#ffbf69',
-                        '#d4a5a5',
-                        '#9e2a2b'
-                    ],
-                    hoverOffset: 20
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#333',
-                            font: { size: 14 }
-                        }
-                    }
-                }
-            }
-        });
+        // Função para criar gráfico dos top 5 produtos
+        function criarGraficoTopProdutos() {
+            const { produtos } = carregarDados();
+            const ctx = document.getElementById('topProdutosChart').getContext('2d');
 
-        // Produtos mais Vendidos (Barra Horizontal)
-        const topProductsCtx = document.getElementById('topProductsChart').getContext('2d');
-        const topProductsChart = new Chart(topProductsCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Arroz', 'Feijão', 'Café', 'Açúcar', 'Leite'],
-                datasets: [{
-                    label: 'Vendas',
-                    data: [350, 280, 220, 180, 150],
-                    backgroundColor: '#007acc',
-                    borderRadius: 8,
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: { display: false }
+            // Ordenar produtos por quantidade e pegar os top 5
+            const produtosOrdenados = produtos
+                .sort((a, b) => b.quantidade - a.quantidade)
+                .slice(0, 5);
+
+            const labels = produtosOrdenados.map(p => p.nome);
+            const data = produtosOrdenados.map(p => p.quantidade);
+
+            if (labels.length === 0) {
+                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto cadastrado</div>';
+                return;
+            }
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Quantidade',
+                        data: data,
+                        backgroundColor: '#007acc',
+                        borderRadius: 8,
+                    }]
                 },
-                scales: {
-                    x: { beginAtZero: true }
-                }
-            }
-        });
-
-        // Clientes Ativos por Região (Pizza)
-        const clientsRegionCtx = document.getElementById('clientsRegionChart').getContext('2d');
-        const clientsRegionChart = new Chart(clientsRegionCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Norte', 'Sul', 'Leste', 'Oeste', 'Centro'],
-                datasets: [{
-                    label: 'Clientes',
-                    data: [150, 250, 300, 180, 120],
-                    backgroundColor: [
-                        '#66cfff',
-                        '#a0c4ff',
-                        '#ff9f1c',
-                        '#ffbf69',
-                        '#d4a5a5'
-                    ],
-                    hoverOffset: 15
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { color: '#333', font: { size: 14 } }
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true }
                     }
                 }
-            }
-        });
+            });
+        }
 
-        // Ticket Médio Mensal (Linha)
-        const avgTicketCtx = document.getElementById('avgTicketChart').getContext('2d');
-        const avgTicketChart = new Chart(avgTicketCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [{
-                    label: 'Ticket Médio',
-                    data: [60, 65, 62, 70, 68, 75],
-                    borderColor: '#ff9f1c',
-                    backgroundColor: '#ffbf69',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: (value) => `R$ ${value}`
+        // Função para criar gráfico de status dos clientes
+        function criarGraficoStatusClientes() {
+            const { clientes } = carregarDados();
+            const ctx = document.getElementById('statusClientesChart').getContext('2d');
+
+            // Contar clientes por status
+            const statusCount = { 'Ativo': 0, 'Inativo': 0 };
+            clientes.forEach(cliente => {
+                const status = cliente.status || 'Ativo';
+                statusCount[status] = (statusCount[status] || 0) + 1;
+            });
+
+            const labels = Object.keys(statusCount);
+            const data = Object.values(statusCount);
+
+            if (data.every(val => val === 0)) {
+                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum cliente cadastrado</div>';
+                return;
+            }
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Status',
+                        data: data,
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#333', font: { size: 14 } }
                         }
                     }
                 }
+            });
+        }
+
+        // Função para criar gráfico de valor por categoria
+        function criarGraficoValorCategoria() {
+            const { produtos } = carregarDados();
+            const ctx = document.getElementById('valorCategoriaChart').getContext('2d');
+
+            // Calcular valor total por categoria
+            const valorCategoria = {};
+            produtos.forEach(produto => {
+                const valor = produto.preco * produto.quantidade;
+                valorCategoria[produto.categoria] = (valorCategoria[produto.categoria] || 0) + valor;
+            });
+
+            const labels = Object.keys(valorCategoria);
+            const data = Object.values(valorCategoria);
+
+            if (labels.length === 0) {
+                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto cadastrado</div>';
+                return;
             }
-        });
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Valor (R$)',
+                        data: data,
+                        borderColor: '#ff9f1c',
+                        backgroundColor: '#ffbf69',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: (value) => `R$ ${value.toLocaleString('pt-BR')}`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para inicializar o dashboard
+        function inicializarDashboard() {
+            atualizarCards();
+            criarGraficoProdutosPorCategoria();
+            criarGraficoEstoque();
+            criarGraficoClientes();
+            criarGraficoTopProdutos();
+            criarGraficoStatusClientes();
+            criarGraficoValorCategoria();
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', inicializarDashboard);
+
+        // Atualizar dashboard a cada 30 segundos (opcional)
+        setInterval(inicializarDashboard, 30000);
     </script>
 </body>
 
