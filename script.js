@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (user.userLevel === "Administrativo") {
             window.location.href = "Admin/home.html"
           } else {
-            window.location.href = "Func/Venda.html"
+            window.location.href = "Func/historico-vendas.html"
           }
         } else {
           showError("E-mail ou senha inválidos!", "loginForm")
