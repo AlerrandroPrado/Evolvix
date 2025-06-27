@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Vendas</title>
+    <!-- Link para o Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="historico-vendas.css">
+    <link rel="icon" href="Evolvix icon.png" type="image/x-icon">
+</head>
+
+<body>
+
+    <!-- Sidebar (Navbar Lateral) -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-container">
+            <!-- Logo ou título do sistema -->
+            <div class="sidebar-brand" onclick="toggleSidebar()">
+                <img src="Evolvix sidebar.png" alt="Logo Evolvix" class="logo-img">
+                <span class="brand-text">Evolvix</span>
+            </div>
+
+            <!-- Links de navegação com ícones -->
+            <ul class="sidebar-links">
+                
+                <li>
+                    <a href="Clientes.html">
+                        <i class="fas fa-users"></i>
+                        <span class="link-text">Clientes</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="historico-vendas.html" class="active">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="link-text">Histórico de Vendas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Categoria.html">
+                        <i class="fas fa-layer-group"></i>
+                        <span class="link-text">Categoria</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Produtos.html">
+                        <i class="fas fa-box-open"></i>
+                        <span class="link-text">Produtos</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Imagem do usuário no canto superior direito -->
+    <div class="user-profile" onclick="toggleProfileOptions()">
+        <img src="Perfil.jpg" alt="" class="user-photo">
+        <div class="profile-options" id="profileOptions">
+            Login - Administrativo
+            <ul>
+                <li><a href="../index.html">Encerrar Sessão</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="content">
+        <h1>Histórico de Vendas</h1>
+        <p>Visualize e gerencie todas as vendas realizadas no sistema.</p>
+        
+        <!-- Barra com botão, busca e filtro -->
+        <div class="toolbar">
+            <a href="Venda.html" id="btnNovaVenda" class="btn-add-venda">
+                <i class="fas fa-plus"></i> Nova Venda
+            </a>
+
+            <input type="text" id="busca" placeholder="Pesquisar por cliente, vendedor ou data">
+
+            <select id="filtroStatus">
+                <option value="">Todas</option>
+                <option value="finalizada">Finalizadas</option>
+                <option value="cancelada">Canceladas</option>
+            </select>
+
+            <input type="date" id="filtroData" title="Filtrar por data">
+        </div>
+
+        <!-- Tabela de vendas -->
+        <table id="tabelaVendas" class="vendas-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Vendedor</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaVendas">
+                <!-- As linhas de vendas serão inseridas aqui via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para visualizar detalhes da venda -->
+    <div id="modalDetalhes" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <div id="conteudoModal">
+                <!-- Conteúdo dos detalhes será inserido aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="historico-vendas.js"></script>
+</body>
+
+</html>

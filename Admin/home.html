@@ -6,14 +6,266 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard - Evolvix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="home.css" />
     <link rel="icon" href="Evolvix icon.png" type="image/x-icon" />
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f7fc;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #004f8b;
+            --primary-light: #0071c5;
+            --primary-dark: #003b6a;
+            --secondary: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            background-color: #f4f7fc;
+            margin: 0;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .sidebar {
+            width: 60px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-x: hidden;
+            transition: width 0.3s ease;
+            z-index: 999;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            margin: 20px 0;
+            cursor: pointer;
+            width: 100%;
+            padding: 0 15px;
+            height: 60px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar.open .sidebar-brand {
+            justify-content: flex-start;
+        }
+
+        .sidebar-brand .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            flex-shrink: 0;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .sidebar .brand-text {
+            display: none;
+            margin-left: 15px;
+            white-space: nowrap;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar.open .brand-text {
+            display: inline-block;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            width: 100%;
+            padding-left: 0;
+            margin-top: 30px;
+        }
+
+        .sidebar-links a {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 16px;
+            padding: 14px 16px;
+            margin: 5px 0;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            justify-content: center;
+        }
+
+        .sidebar.open .sidebar-links a {
+            justify-content: flex-start;
+        }
+
+        .sidebar-links i {
+            margin-right: 15px;
+            min-width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .sidebar .link-text {
+            display: none;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .sidebar.open .link-text {
+            display: inline;
+            opacity: 1;
+        }
+
+        .sidebar-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 3px solid var(--warning);
+        }
+
+        .sidebar-links a.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left: 3px solid var(--warning);
+        }
+
+        .content {
+            margin-left: 60px;
+            padding: 30px;
+            flex: 1;
+            transition: margin-left 0.3s ease;
+            max-width: 100%;
+        }
+
+        .sidebar.open + .content {
+            margin-left: 250px;
+        }
+
+        .user-profile {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .user-profile:hover {
+            transform: scale(1.05);
+        }
+
+        .user-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+        }
+
+        .profile-options {
+            display: none;
+            background-color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border-radius: var(--border-radius);
+            width: 180px;
+            text-align: left;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            padding: 10px 0;
+            font-weight: 500;
+            color: var(--dark);
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-options ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 8px;
+        }
+
+        .profile-options ul li {
+            padding: 0;
+        }
+
+        .profile-options ul li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 15px;
+            display: block;
+            padding: 10px 15px;
+            transition: background-color 0.2s ease;
+        }
+
+        .profile-options ul li a:hover {
+            background-color: var(--gray-light);
+            color: var(--primary);
+        }
+
+        .profile-options.show {
+            display: block;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 16px;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
         }
 
         .dashboard-cards {
@@ -33,6 +285,7 @@
             padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease;
+            border-left: 4px solid var(--primary);
         }
 
         .card:hover {
@@ -42,6 +295,7 @@
         .card i {
             font-size: 30px;
             color: #004f8b;
+            margin-bottom: 10px;
         }
 
         .card h3 {
@@ -53,13 +307,14 @@
         .card p {
             font-size: 16px;
             color: #777;
+            margin: 0;
         }
 
         .charts-grid {
             margin-top: 40px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-auto-rows: 350px;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 400px 400px;
             gap: 30px;
             max-width: 100%;
             margin-left: auto;
@@ -69,16 +324,21 @@
 
         .chart-container {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .chart-container h2 {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 20px;
             color: #333;
             text-align: center;
@@ -86,25 +346,59 @@
 
         .chart-container canvas {
             width: 100% !important;
-            height: 270px !important;
+            height: 100% !important;
+            flex: 1;
         }
 
-        .chart-container.round-chart canvas {
-            width: 270px !important;
-            height: 270px !important;
+        .chart-container.full-width {
+            grid-column: 1 / -1;
         }
 
-        @media (max-width: 900px) {
+        .chart-container.pie-chart {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-container.pie-chart canvas {
+            max-width: 300px;
+            max-height: 300px;
+        }
+
+        @media (max-width: 1200px) {
             .charts-grid {
-                grid-template-columns: repeat(2, 1fr);
-                grid-auto-rows: 320px;
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(3, 400px);
+            }
+            
+            .chart-container.full-width {
+                grid-column: 1;
             }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px 15px;
+                margin-left: 0;
+            }
+            
+            .sidebar.open + .content {
+                margin-left: 0;
+            }
+            
+            .sidebar.open {
+                width: 100%;
+            }
+            
             .charts-grid {
                 grid-template-columns: 1fr;
-                grid-auto-rows: 350px;
+                grid-template-rows: repeat(3, 350px);
+                padding: 0 10px;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
             }
         }
 
@@ -115,6 +409,28 @@
             height: 200px;
             color: #666;
             font-style: italic;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
         }
     </style>
 </head>
@@ -135,7 +451,10 @@
                     <a href="Clientes.html"><i class="fas fa-users"></i><span class="link-text">Clientes</span></a>
                 </li>
                 <li>
-                    <a href="Venda.html"><i class="fas fa-shopping-cart"></i><span class="link-text">Vendas</span></a>
+                    <a href="historico-vendas.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="link-text">Histórico de Vendas</span>
+                    </a>
                 </li>
                 <li>
                     <a href="Categoria.html"><i class="fas fa-layer-group"></i><span class="link-text">Categoria</span></a>
@@ -158,61 +477,56 @@
     </div>
 
     <div class="content">
-        <h1>Visão Geral</h1>
-        <p>Resumo das principais atividades e indicadores do sistema.</p>
+        <h1>Dashboard de Vendas</h1>
+        <p>Análise completa das vendas e performance do sistema.</p>
 
         <div class="dashboard-cards">
             <div class="card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Faturamento Total</h3>
+                <p id="faturamentoTotal">R$ 0,00</p>
+            </div>
+            <div class="card">
                 <i class="fas fa-users"></i>
-                <h3>Total de Clientes</h3>
-                <p id="totalClientes">0</p>
+                <h3>Vendedores Ativos</h3>
+                <p id="vendedoresAtivos">0</p>
             </div>
             <div class="card">
-                <i class="fas fa-layer-group"></i>
-                <h3>Categorias Ativas</h3>
-                <p id="totalCategorias">0</p>
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Total de Vendas</h3>
+                <p id="totalVendas">0</p>
             </div>
             <div class="card">
-                <i class="fas fa-box"></i>
-                <h3>Produtos Ativos</h3>
-                <p id="totalProdutos">0</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-dollar-sign"></i>
-                <h3>Valor Total em Estoque</h3>
-                <p id="valorEstoque">R$ 0,00</p>
+                <i class="fas fa-trophy"></i>
+                <h3>Melhor Vendedor</h3>
+                <p id="melhorVendedor">-</p>
             </div>
         </div>
 
         <div class="charts-grid">
+            <div class="chart-container full-width">
+                <h2>Evolução Diária de Vendas</h2>
+                <canvas id="vendasDiariasChart"></canvas>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #004f8b;"></div>
+                        <span>Faturamento Diário</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #28a745;"></div>
+                        <span>Número de Vendas</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="chart-container">
+                <h2>Vendas por Usuário</h2>
+                <canvas id="vendasUsuarioChart"></canvas>
+            </div>
+
+            <div class="chart-container pie-chart">
                 <h2>Produtos por Categoria</h2>
                 <canvas id="produtosCategoriaChart"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <h2>Estoque por Categoria</h2>
-                <canvas id="estoqueChart"></canvas>
-            </div>
-
-            <div class="chart-container round-chart">
-                <h2>Distribuição de Clientes</h2>
-                <canvas id="clientesChart"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <h2>Top 5 Produtos (Quantidade)</h2>
-                <canvas id="topProdutosChart"></canvas>
-            </div>
-
-            <div class="chart-container round-chart">
-                <h2>Status dos Clientes</h2>
-                <canvas id="statusClientesChart"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <h2>Valor por Categoria (R$)</h2>
-                <canvas id="valorCategoriaChart"></canvas>
             </div>
         </div>
     </div>
@@ -231,303 +545,644 @@
             profileOptions.classList.toggle('show');
         }
 
-        // Função para carregar dados do localStorage
-        function carregarDados() {
-            const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-            const categorias = JSON.parse(localStorage.getItem("categoriasCadastradas")) || [];
-            const produtos = JSON.parse(localStorage.getItem("produtosCadastrados")) || [];
+        // DADOS DO HISTÓRICO DE VENDAS (do arquivo historico-vendas.js)
+        const VENDAS_PADRAO = [
+            {
+                id: "V012",
+                data: "2024-01-15",
+                hora: "14:30",
+                cliente: "João da Silva",
+                vendedor: "Maria Santos",
+                total: 127.5,
+                valorPago: 130.0,
+                troco: 2.5,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Maçã Fuji", quantidade: 2, unitario: 3.5, total: 7.0, tipoVenda: "quantidade" },
+                    { nome: "Leite Integral", quantidade: 3, unitario: 4.9, total: 14.7, tipoVenda: "quantidade" },
+                    { nome: "Pão Francês", quantidade: 10, unitario: 0.5, total: 5.0, tipoVenda: "quantidade" },
+                    { nome: "Detergente Neutro", quantidade: 2, unitario: 2.3, total: 4.6, tipoVenda: "quantidade" },
+                    { nome: "Shampoo Anticaspa", quantidade: 1, unitario: 12.99, total: 12.99, tipoVenda: "quantidade" },
+                    { nome: "Feijão Carioca", quantidade: 5, unitario: 7.8, total: 39.0, tipoVenda: "quantidade" },
+                    { nome: "Refrigerante Cola", quantidade: 7, unitario: 6.5, total: 45.5, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V011",
+                data: "2024-01-15",
+                hora: "16:45",
+                cliente: "Maria Oliveira",
+                vendedor: "João Silva",
+                total: 89.9,
+                valorPago: 100.0,
+                troco: 10.1,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Ração para Cães", quantidade: 1, unitario: 89.9, total: 89.9, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V010",
+                data: "2024-01-14",
+                hora: "10:15",
+                cliente: "Carlos Mendes",
+                vendedor: "Ana Costa",
+                total: 45.8,
+                valorPago: 0,
+                troco: 0,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Detergente Neutro", quantidade: 2, unitario: 2.3, total: 4.6, tipoVenda: "quantidade" },
+                    { nome: "Shampoo Anticaspa", quantidade: 1, unitario: 12.99, total: 12.99, tipoVenda: "quantidade" },
+                    { nome: "Feijão Carioca", quantidade: 2, unitario: 7.8, total: 15.6, tipoVenda: "quantidade" },
+                    { nome: "Refrigerante Cola", quantidade: 2, unitario: 6.5, total: 13.0, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V009",
+                data: "2024-01-14",
+                hora: "09:20",
+                cliente: "Fernanda Costa",
+                vendedor: "Pedro Alves",
+                total: 13.0,
+                valorPago: 15.0,
+                troco: 2.0,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Refrigerante Cola", quantidade: 2, unitario: 6.5, total: 13.0, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V008",
+                data: "2024-01-13",
+                hora: "15:30",
+                cliente: "Roberto Silva",
+                vendedor: "Lucia Ferreira",
+                total: 234.7,
+                valorPago: 250.0,
+                troco: 15.3,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Maçã Fuji", quantidade: 5, unitario: 3.5, total: 17.5, tipoVenda: "quantidade" },
+                    { nome: "Leite Integral", quantidade: 10, unitario: 4.9, total: 49.0, tipoVenda: "quantidade" },
+                    { nome: "Feijão Carioca", quantidade: 8, unitario: 7.8, total: 62.4, tipoVenda: "quantidade" },
+                    { nome: "Ração para Cães", quantidade: 1, unitario: 89.9, total: 89.9, tipoVenda: "quantidade" },
+                    { nome: "Pão Francês", quantidade: 32, unitario: 0.5, total: 16.0, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V007",
+                data: "2024-01-12",
+                hora: "11:45",
+                cliente: "Ana Paula Santos",
+                vendedor: "Carlos Santos",
+                total: 67.89,
+                valorPago: 70.0,
+                troco: 2.11,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Shampoo Anticaspa", quantidade: 3, unitario: 12.99, total: 38.97, tipoVenda: "quantidade" },
+                    { nome: "Detergente Neutro", quantidade: 5, unitario: 2.3, total: 11.5, tipoVenda: "quantidade" },
+                    { nome: "Maçã Fuji", quantidade: 5, unitario: 3.5, total: 17.5, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V006",
+                data: "2024-01-12",
+                hora: "08:30",
+                cliente: "Eduardo Pereira",
+                vendedor: "Maria Santos",
+                total: 156.8,
+                valorPago: 160.0,
+                troco: 3.2,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Ração para Cães", quantidade: 1, unitario: 89.9, total: 89.9, tipoVenda: "quantidade" },
+                    { nome: "Leite Integral", quantidade: 8, unitario: 4.9, total: 39.2, tipoVenda: "quantidade" },
+                    { nome: "Pão Francês", quantidade: 20, unitario: 0.5, total: 10.0, tipoVenda: "quantidade" },
+                    { nome: "Maçã Fuji", quantidade: 5, unitario: 3.5, total: 17.7, tipoVenda: "peso" }
+                ]
+            },
+            {
+                id: "V005",
+                data: "2024-01-11",
+                hora: "17:15",
+                cliente: "Patrícia Lima",
+                vendedor: "João Silva",
+                total: 78.45,
+                valorPago: 80.0,
+                troco: 1.55,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Feijão Carioca", quantidade: 3, unitario: 7.8, total: 23.4, tipoVenda: "quantidade" },
+                    { nome: "Refrigerante Cola", quantidade: 4, unitario: 6.5, total: 26.0, tipoVenda: "quantidade" },
+                    { nome: "Shampoo Anticaspa", quantidade: 1, unitario: 12.99, total: 12.99, tipoVenda: "quantidade" },
+                    { nome: "Detergente Neutro", quantidade: 7, unitario: 2.3, total: 16.1, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V004",
+                data: "2024-01-11",
+                hora: "13:20",
+                cliente: "Ricardo Almeida",
+                vendedor: "Ana Costa",
+                total: 32.5,
+                valorPago: 0,
+                troco: 0,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Refrigerante Cola", quantidade: 5, unitario: 6.5, total: 32.5, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V003",
+                data: "2024-01-10",
+                hora: "16:00",
+                cliente: "Juliana Rodrigues",
+                vendedor: "Pedro Alves",
+                total: 198.75,
+                valorPago: 200.0,
+                troco: 1.25,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Ração para Cães", quantidade: 2, unitario: 89.9, total: 179.8, tipoVenda: "quantidade" },
+                    { nome: "Maçã Fuji", quantidade: 2.5, unitario: 3.5, total: 8.75, tipoVenda: "peso" },
+                    { nome: "Pão Francês", quantidade: 20, unitario: 0.5, total: 10.0, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V002",
+                data: "2024-01-10",
+                hora: "12:45",
+                cliente: "Marcos Vieira",
+                vendedor: "Lucia Ferreira",
+                total: 95.6,
+                valorPago: 100.0,
+                troco: 4.4,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Feijão Carioca", quantidade: 6, unitario: 7.8, total: 46.8, tipoVenda: "quantidade" },
+                    { nome: "Leite Integral", quantidade: 10, unitario: 4.9, total: 49.0, tipoVenda: "quantidade" }
+                ]
+            },
+            {
+                id: "V001",
+                data: "2024-01-09",
+                hora: "14:10",
+                cliente: "Camila Souza",
+                vendedor: "Carlos Santos",
+                total: 41.47,
+                valorPago: 45.0,
+                troco: 3.53,
+                status: "finalizada",
+                produtos: [
+                    { nome: "Shampoo Anticaspa", quantidade: 2, unitario: 12.99, total: 25.98, tipoVenda: "quantidade" },
+                    { nome: "Detergente Neutro", quantidade: 3, unitario: 2.3, total: 6.9, tipoVenda: "quantidade" },
+                    { nome: "Refrigerante Cola", quantidade: 1, unitario: 6.5, total: 6.5, tipoVenda: "quantidade" },
+                    { nome: "Pão Francês", quantidade: 4, unitario: 0.5, total: 2.0, tipoVenda: "quantidade" }
+                ]
+            }
+        ];
 
-            return { clientes, categorias, produtos };
+        // Dados de produtos padrão
+        const PRODUTOS_PADRAO = [
+            {
+                codigo: 1,
+                nome: "Maçã Fuji",
+                descricao: "Maçã fresca e crocante",
+                preco: 3.50,
+                quantidade: 100,
+                categoria: "Hortifruti"
+            },
+            {
+                codigo: 2,
+                nome: "Leite Integral",
+                descricao: "Leite de vaca pasteurizado 1L",
+                preco: 4.90,
+                quantidade: 50,
+                categoria: "Laticínios"
+            },
+            {
+                codigo: 3,
+                nome: "Pão Francês",
+                descricao: "Pão crocante de padaria",
+                preco: 0.50,
+                quantidade: 200,
+                categoria: "Padaria"
+            },
+            {
+                codigo: 4,
+                nome: "Detergente Neutro",
+                descricao: "Detergente para louças 500ml",
+                preco: 2.30,
+                quantidade: 80,
+                categoria: "Limpeza"
+            },
+            {
+                codigo: 5,
+                nome: "Shampoo Anticaspa",
+                descricao: "Shampoo 350ml com ação anticaspa",
+                preco: 12.99,
+                quantidade: 40,
+                categoria: "Higiene Pessoal"
+            },
+            {
+                codigo: 6,
+                nome: "Ração para Cães",
+                descricao: "Ração seca para cães adultos 10kg",
+                preco: 89.90,
+                quantidade: 25,
+                categoria: "Pet"
+            },
+            {
+                codigo: 7,
+                nome: "Feijão Carioca",
+                descricao: "Feijão tipo 1 - pacote 1kg",
+                preco: 7.80,
+                quantidade: 60,
+                categoria: "Mercearia"
+            },
+            {
+                codigo: 8,
+                nome: "Refrigerante Cola",
+                descricao: "Refrigerante sabor cola 2L",
+                preco: 6.50,
+                quantidade: 90,
+                categoria: "Bebidas"
+            }
+        ];
+
+        // Dados de categorias padrão
+        const CATEGORIAS_PADRAO = [
+            { nome: "Bebidas", descricao: "Águas, refrigerantes, sucos e alcoólicos" },
+            { nome: "Carnes", descricao: "Carnes bovinas, suínas e aves" },
+            { nome: "Congelados", descricao: "Produtos congelados e sorvetes" },
+            { nome: "Higiene Pessoal", descricao: "Sabonetes, shampoos e cuidados pessoais" },
+            { nome: "Hortifruti", descricao: "Frutas, verduras e legumes frescos" },
+            { nome: "Laticínios", descricao: "Queijos, iogurtes, leite e frios" },
+            { nome: "Limpeza", descricao: "Produtos de limpeza doméstica" },
+            { nome: "Mercearia", descricao: "Grãos, massas, enlatados e cereais" },
+            { nome: "Padaria", descricao: "Pães, bolos e produtos de confeitaria" },
+            { nome: "Pet", descricao: "Alimentos e acessórios para animais" }
+        ];
+
+        // Função para carregar dados (localStorage + dados padrão)
+        function carregarDados() {
+            // Carrega vendas (localStorage ou padrão)
+            const vendas = JSON.parse(localStorage.getItem("historicoVendas")) || VENDAS_PADRAO;
+            
+            // Carrega produtos (localStorage ou padrão)
+            const produtos = JSON.parse(localStorage.getItem("produtosCadastrados")) || PRODUTOS_PADRAO;
+            
+            // Carrega categorias (localStorage ou padrão)
+            const categorias = JSON.parse(localStorage.getItem("categoriasCadastradas")) || CATEGORIAS_PADRAO;
+
+            return { vendas, produtos, categorias };
+        }
+
+        // Função para processar vendas diárias
+        function processarVendasDiarias(vendas) {
+            // Agrupa vendas por data
+            const vendasPorData = {};
+            
+            vendas.forEach(venda => {
+                const data = venda.data;
+                if (!vendasPorData[data]) {
+                    vendasPorData[data] = {
+                        faturamento: 0,
+                        quantidade: 0
+                    };
+                }
+                vendasPorData[data].faturamento += venda.total;
+                vendasPorData[data].quantidade += 1;
+            });
+
+            // Ordena por data e converte para arrays
+            const datasOrdenadas = Object.keys(vendasPorData).sort();
+            const labels = datasOrdenadas.map(data => {
+                const [ano, mes, dia] = data.split('-');
+                return `${dia}/${mes}`;
+            });
+            const faturamentoDiario = datasOrdenadas.map(data => vendasPorData[data].faturamento);
+            const quantidadeDiaria = datasOrdenadas.map(data => vendasPorData[data].quantidade);
+
+            return { labels, faturamentoDiario, quantidadeDiaria };
+        }
+
+        // Função para processar vendas por usuário
+        function processarVendasPorUsuario(vendas) {
+            const vendasPorVendedor = {};
+            
+            vendas.forEach(venda => {
+                if (vendasPorVendedor[venda.vendedor]) {
+                    vendasPorVendedor[venda.vendedor] += venda.total;
+                } else {
+                    vendasPorVendedor[venda.vendedor] = venda.total;
+                }
+            });
+
+            // Converte para array e ordena por valor
+            const usuarios = Object.entries(vendasPorVendedor)
+                .map(([nome, vendas]) => ({ nome, vendas }))
+                .sort((a, b) => b.vendas - a.vendas)
+                .slice(0, 5); // Top 5
+
+            return usuarios;
+        }
+
+        // Função para processar produtos por categoria
+        function processarProdutosPorCategoria(produtos, categorias) {
+            const produtosPorCategoria = {};
+            
+            // Inicializa com categorias existentes
+            categorias.forEach(categoria => {
+                produtosPorCategoria[categoria.nome] = 0;
+            });
+            
+            // Conta produtos por categoria
+            produtos.forEach(produto => {
+                if (produtosPorCategoria.hasOwnProperty(produto.categoria)) {
+                    produtosPorCategoria[produto.categoria]++;
+                } else {
+                    produtosPorCategoria[produto.categoria] = 1;
+                }
+            });
+
+            // Converte para array e filtra categorias com produtos
+            const categoriasComProdutos = Object.entries(produtosPorCategoria)
+                .filter(([categoria, quantidade]) => quantidade > 0)
+                .map(([categoria, quantidade]) => ({ nome: categoria, quantidade }));
+
+            return categoriasComProdutos;
         }
 
         // Função para atualizar cards do dashboard
         function atualizarCards() {
-            const { clientes, categorias, produtos } = carregarDados();
+            const { vendas, produtos } = carregarDados();
+            
+            // Total de faturamento (todas as vendas)
+            const faturamentoTotal = vendas.reduce((total, venda) => total + venda.total, 0);
+            
+            // Vendedores únicos
+            const vendedoresUnicos = [...new Set(vendas.map(venda => venda.vendedor))];
+            
+            // Total de vendas (quantidade)
+            const totalVendas = vendas.length;
+            
+            // Melhor vendedor
+            const vendasPorVendedor = processarVendasPorUsuario(vendas);
+            const melhorVendedor = vendasPorVendedor.length > 0 ? vendasPorVendedor[0].nome : 'Nenhum';
 
-            // Total de clientes
-            document.getElementById('totalClientes').textContent = clientes.length;
-
-            // Total de categorias
-            document.getElementById('totalCategorias').textContent = categorias.length;
-
-            // Total de produtos
-            document.getElementById('totalProdutos').textContent = produtos.length;
-
-            // Valor total em estoque
-            const valorTotal = produtos.reduce((total, produto) => {
-                return total + (produto.preco * produto.quantidade);
-            }, 0);
-            document.getElementById('valorEstoque').textContent = 
-                valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            // Atualiza os cards
+            document.getElementById('faturamentoTotal').textContent = 
+                faturamentoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('vendedoresAtivos').textContent = vendedoresUnicos.length;
+            document.getElementById('totalVendas').textContent = totalVendas;
+            document.getElementById('melhorVendedor').textContent = melhorVendedor;
         }
 
-        // Função para criar gráfico de produtos por categoria
-        function criarGraficoProdutosPorCategoria() {
-            const { produtos } = carregarDados();
-            const ctx = document.getElementById('produtosCategoriaChart').getContext('2d');
-
-            // Contar produtos por categoria
-            const categoriaCount = {};
-            produtos.forEach(produto => {
-                categoriaCount[produto.categoria] = (categoriaCount[produto.categoria] || 0) + 1;
-            });
-
-            const labels = Object.keys(categoriaCount);
-            const data = Object.values(categoriaCount);
-
-            if (labels.length === 0) {
-                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto cadastrado</div>';
-                return;
-            }
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Quantidade de Produtos',
-                        data: data,
-                        backgroundColor: '#004f8b',
-                        borderRadius: 10,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-        // Função para criar gráfico de estoque por categoria
-        function criarGraficoEstoque() {
-            const { produtos } = carregarDados();
-            const ctx = document.getElementById('estoqueChart').getContext('2d');
-
-            // Somar estoque por categoria
-            const estoqueCategoria = {};
-            produtos.forEach(produto => {
-                estoqueCategoria[produto.categoria] = (estoqueCategoria[produto.categoria] || 0) + produto.quantidade;
-            });
-
-            const labels = Object.keys(estoqueCategoria);
-            const data = Object.values(estoqueCategoria);
-
-            if (labels.length === 0) {
-                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto em estoque</div>';
-                return;
-            }
+        // Gráfico de vendas diárias (linha)
+        function criarGraficoVendasDiarias() {
+            const { vendas } = carregarDados();
+            const { labels, faturamentoDiario, quantidadeDiaria } = processarVendasDiarias(vendas);
+            const ctx = document.getElementById('vendasDiariasChart').getContext('2d');
 
             new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: 'Quantidade em Estoque',
-                        data: data,
-                        fill: false,
-                        borderColor: '#007acc',
-                        backgroundColor: '#007acc',
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
-                    }]
+                    datasets: [
+                        {
+                            label: 'Faturamento (R$)',
+                            data: faturamentoDiario,
+                            borderColor: '#004f8b',
+                            backgroundColor: 'rgba(0, 79, 139, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#004f8b',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Número de Vendas',
+                            data: quantidadeDiaria,
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            pointBackgroundColor: '#28a745',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            yAxisID: 'y1'
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-        // Função para criar gráfico de distribuição de clientes
-        function criarGraficoClientes() {
-            const { clientes } = carregarDados();
-            const ctx = document.getElementById('clientesChart').getContext('2d');
-
-            // Contar clientes por tipo
-            const tipoCount = { 'Pessoa Física': 0, 'Pessoa Jurídica': 0 };
-            clientes.forEach(cliente => {
-                if (cliente.tipoPessoa === 'fisica') {
-                    tipoCount['Pessoa Física']++;
-                } else if (cliente.tipoPessoa === 'juridica') {
-                    tipoCount['Pessoa Jurídica']++;
-                }
-            });
-
-            const labels = Object.keys(tipoCount);
-            const data = Object.values(tipoCount);
-
-            if (data.every(val => val === 0)) {
-                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum cliente cadastrado</div>';
-                return;
-            }
-
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Clientes',
-                        data: data,
-                        backgroundColor: ['#004f8b', '#007acc'],
-                        hoverOffset: 20
-                    }]
-                },
-                options: {
-                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#333',
-                                font: { size: 14 }
+                            display: false // Removemos a legenda padrão para usar a customizada
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    if (label.includes('Faturamento')) {
+                                        return label + ': ' + value.toLocaleString('pt-BR', { 
+                                            style: 'currency', 
+                                            currency: 'BRL' 
+                                        });
+                                    } else {
+                                        return label + ': ' + value + ' vendas';
+                                    }
+                                }
                             }
                         }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' vendas';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
                     }
                 }
             });
         }
 
-        // Função para criar gráfico dos top 5 produtos
-        function criarGraficoTopProdutos() {
-            const { produtos } = carregarDados();
-            const ctx = document.getElementById('topProdutosChart').getContext('2d');
+        // Gráfico de vendas por usuário (barras)
+        function criarGraficoVendasUsuario() {
+            const { vendas } = carregarDados();
+            const usuarios = processarVendasPorUsuario(vendas);
+            const ctx = document.getElementById('vendasUsuarioChart').getContext('2d');
 
-            // Ordenar produtos por quantidade e pegar os top 5
-            const produtosOrdenados = produtos
-                .sort((a, b) => b.quantidade - a.quantidade)
-                .slice(0, 5);
-
-            const labels = produtosOrdenados.map(p => p.nome);
-            const data = produtosOrdenados.map(p => p.quantidade);
-
-            if (labels.length === 0) {
-                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto cadastrado</div>';
-                return;
-            }
+            const nomes = usuarios.map(u => u.nome.split(' ')[0]); // Apenas primeiro nome
+            const vendasValores = usuarios.map(u => u.vendas);
 
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: labels,
+                    labels: nomes,
                     datasets: [{
-                        label: 'Quantidade',
-                        data: data,
-                        backgroundColor: '#007acc',
+                        label: 'Vendas (R$)',
+                        data: vendasValores,
+                        backgroundColor: [
+                            '#004f8b',
+                            '#0071c5',
+                            '#28a745',
+                            '#ffc107',
+                            '#dc3545'
+                        ],
                         borderRadius: 8,
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-        // Função para criar gráfico de status dos clientes
-        function criarGraficoStatusClientes() {
-            const { clientes } = carregarDados();
-            const ctx = document.getElementById('statusClientesChart').getContext('2d');
-
-            // Contar clientes por status
-            const statusCount = { 'Ativo': 0, 'Inativo': 0 };
-            clientes.forEach(cliente => {
-                const status = cliente.status || 'Ativo';
-                statusCount[status] = (statusCount[status] || 0) + 1;
-            });
-
-            const labels = Object.keys(statusCount);
-            const data = Object.values(statusCount);
-
-            if (data.every(val => val === 0)) {
-                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum cliente cadastrado</div>';
-                return;
-            }
-
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Status',
-                        data: data,
-                        backgroundColor: ['#28a745', '#dc3545'],
-                        hoverOffset: 15
+                        borderSkipped: false,
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                            labels: { color: '#333', font: { size: 14 } }
+                            display: false
                         }
-                    }
-                }
-            });
-        }
-
-        // Função para criar gráfico de valor por categoria
-        function criarGraficoValorCategoria() {
-            const { produtos } = carregarDados();
-            const ctx = document.getElementById('valorCategoriaChart').getContext('2d');
-
-            // Calcular valor total por categoria
-            const valorCategoria = {};
-            produtos.forEach(produto => {
-                const valor = produto.preco * produto.quantidade;
-                valorCategoria[produto.categoria] = (valorCategoria[produto.categoria] || 0) + valor;
-            });
-
-            const labels = Object.keys(valorCategoria);
-            const data = Object.values(valorCategoria);
-
-            if (labels.length === 0) {
-                ctx.canvas.parentElement.innerHTML = '<div class="no-data">Nenhum produto cadastrado</div>';
-                return;
-            }
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Valor (R$)',
-                        data: data,
-                        borderColor: '#ff9f1c',
-                        backgroundColor: '#ffbf69',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { display: false } },
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                callback: (value) => `R$ ${value.toLocaleString('pt-BR')}`
+                                callback: function(value) {
+                                    return 'R$ ' + (value / 1000).toFixed(1) + 'k';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
                             }
                         }
                     }
+                }
+            });
+        }
+
+        // Gráfico de produtos por categoria (pizza)
+        function criarGraficoProdutosCategoria() {
+            const { produtos, categorias } = carregarDados();
+            const categoriasComProdutos = processarProdutosPorCategoria(produtos, categorias);
+            const ctx = document.getElementById('produtosCategoriaChart').getContext('2d');
+
+            const nomes = categoriasComProdutos.map(c => c.nome);
+            const quantidades = categoriasComProdutos.map(c => c.quantidade);
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: nomes,
+                    datasets: [{
+                        data: quantidades,
+                        backgroundColor: [
+                            '#004f8b',  // Bebidas
+                            '#dc3545',  // Carnes
+                            '#17a2b8',  // Congelados
+                            '#e83e8c',  // Higiene Pessoal
+                            '#28a745',  // Hortifruti
+                            '#ffc107',  // Laticínios
+                            '#6f42c1',  // Limpeza
+                            '#fd7e14',  // Mercearia
+                            '#20c997',  // Padaria
+                            '#6c757d'   // Pet
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true,
+                                font: {
+                                    size: 11
+                                },
+                                generateLabels: function(chart) {
+                                    const data = chart.data;
+                                    if (data.labels.length && data.datasets.length) {
+                                        return data.labels.map((label, i) => {
+                                            const dataset = data.datasets[0];
+                                            const backgroundColor = dataset.backgroundColor[i];
+                                            return {
+                                                text: `${label} (${dataset.data[i]})`,
+                                                fillStyle: backgroundColor,
+                                                strokeStyle: backgroundColor,
+                                                pointStyle: 'circle'
+                                            };
+                                        });
+                                    }
+                                    return [];
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${label}: ${value} produtos (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '50%'
                 }
             });
         }
@@ -535,19 +1190,23 @@
         // Função para inicializar o dashboard
         function inicializarDashboard() {
             atualizarCards();
-            criarGraficoProdutosPorCategoria();
-            criarGraficoEstoque();
-            criarGraficoClientes();
-            criarGraficoTopProdutos();
-            criarGraficoStatusClientes();
-            criarGraficoValorCategoria();
+            criarGraficoVendasDiarias();
+            criarGraficoVendasUsuario();
+            criarGraficoProdutosCategoria();
         }
 
         // Inicializar quando a página carregar
         document.addEventListener('DOMContentLoaded', inicializarDashboard);
 
-        // Atualizar dashboard a cada 30 segundos (opcional)
-        setInterval(inicializarDashboard, 30000);
+        // Fechar menu do perfil ao clicar fora
+        document.addEventListener('click', function(event) {
+            const userProfile = document.querySelector('.user-profile');
+            const profileOptions = document.getElementById('profileOptions');
+            
+            if (!userProfile.contains(event.target)) {
+                profileOptions.classList.remove('show');
+            }
+        });
     </script>
 </body>
 
